@@ -16,6 +16,7 @@ button {padding:15px 30px; margin:10px; border:none; border-radius:10px; cursor:
 <a href="quiz.php"><button>📚 Jogar Quiz</button></a>
 <a href="memoria.php"><button>🧠 Jogo da Memória</button></a>
 <a href="verdadeiro_falso.php"><button>✔ Verdadeiro ou Falso</button></a>
+<a href="identificar_golpe.php"><button style="padding:15px;margin:10px;font-size:18px;">🔎 Identificador de Golpes</button></a>
 </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 22/03/2026 às 02:10
+-- Tempo de geração: 31/03/2026 às 02:58
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -126,6 +126,33 @@ INSERT INTO `categorias` (`id_categoria`, `nome_categoria`, `descricao`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `cenarios_golpe`
+--
+
+CREATE TABLE `cenarios_golpe` (
+  `id_cenario` int(11) NOT NULL,
+  `titulo` varchar(200) DEFAULT NULL,
+  `imagem` varchar(255) DEFAULT NULL,
+  `descricao` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `cenarios_golpe`
+--
+
+INSERT INTO `cenarios_golpe` (`id_cenario`, `titulo`, `imagem`, `descricao`) VALUES
+(1, 'Site falso de banco', 'banco_falso.png', 'Identifique sinais de golpe.'),
+(2, 'Loja online suspeita', 'loja_falsa.png', 'Identifique sinais de fraude.'),
+(3, 'Email phishing', 'email_phishing.png', 'Identifique sinais de phishing.'),
+(4, 'Email falso Receita Federal', 'golpe1.png', NULL),
+(5, 'Site falso Banco', 'golpe2.png', NULL),
+(6, 'Promoção falsa PlayStation', 'golpe3.png', NULL),
+(7, 'SMS falso Correios', 'golpe4.png', NULL),
+(8, 'Loja falsa ecommerce', 'golpe5.png', NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para tabela `conquistas`
 --
 
@@ -143,6 +170,32 @@ CREATE TABLE `conquistas` (
 INSERT INTO `conquistas` (`id_conquista`, `nome_conquista`, `descricao`, `xp_bonus`) VALUES
 (1, 'Primeira Resposta', 'Responder primeira pergunta', 10),
 (2, 'Acertou 10 perguntas', 'Especialista iniciante', 50);
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `erros_cenario`
+--
+
+CREATE TABLE `erros_cenario` (
+  `id_erro` int(11) NOT NULL,
+  `id_cenario` int(11) DEFAULT NULL,
+  `pos_x` int(11) DEFAULT NULL,
+  `pos_y` int(11) DEFAULT NULL,
+  `raio` int(11) DEFAULT 50,
+  `explicacao` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `erros_cenario`
+--
+
+INSERT INTO `erros_cenario` (`id_erro`, `id_cenario`, `pos_x`, `pos_y`, `raio`, `explicacao`) VALUES
+(1, 4, 900, 520, 150, 'Email phishing: domínio falso e link suspeito pedindo regularização urgente.'),
+(2, 5, 420, 260, 150, 'Página falsa de banco pedindo dados de acesso para roubo de credenciais.'),
+(3, 6, 780, 420, 150, 'Preço extremamente baixo e link encurtado indicam possível golpe.'),
+(4, 7, 550, 420, 150, 'Mensagem SMS com link falso solicitando pagamento de taxa.'),
+(5, 8, 140, 80, 120, 'Site marcado como NÃO SEGURO pelo navegador.');
 
 -- --------------------------------------------------------
 
@@ -402,6 +455,45 @@ CREATE TABLE `usuario_conquistas` (
 -- --------------------------------------------------------
 
 --
+-- Estrutura para tabela `verdadeiro_falso`
+--
+
+CREATE TABLE `verdadeiro_falso` (
+  `id_pergunta` int(11) NOT NULL,
+  `pergunta` text DEFAULT NULL,
+  `resposta_correta` tinyint(1) DEFAULT NULL,
+  `explicacao` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `verdadeiro_falso`
+--
+
+INSERT INTO `verdadeiro_falso` (`id_pergunta`, `pergunta`, `resposta_correta`, `explicacao`) VALUES
+(1, 'Golpistas podem enviar e-mails que imitam bancos ou empresas conhecidas para enganar usuários e roubar dados pessoais.', 1, 'Esse tipo de golpe é chamado de phishing. O criminoso finge ser uma empresa confiável para que a vítima informe dados sensíveis.'),
+(2, 'Se um site possui cadeado HTTPS na barra do navegador, isso garante que ele é sempre legítimo e não pode ser um golpe.', 0, 'O HTTPS indica apenas que a conexão é criptografada, mas o site ainda pode ser falso se estiver imitando uma empresa.'),
+(3, 'Nunca se deve compartilhar códigos de verificação recebidos por SMS, pois eles podem permitir que alguém acesse sua conta.', 1, 'Esses códigos são usados para autenticação e devem ser mantidos em segredo.'),
+(4, 'Golpistas frequentemente criam senso de urgência em mensagens para fazer a vítima agir rapidamente sem verificar a informação.', 1, 'A pressão psicológica é uma técnica comum usada em engenharia social.'),
+(5, 'Aplicativos baixados fora das lojas oficiais são sempre seguros se tiverem muitas avaliações positivas.', 0, 'Aplicativos fora de lojas oficiais podem conter malware ou programas maliciosos.'),
+(6, 'Perfis falsos em redes sociais podem ser usados para aplicar golpes financeiros ou coletar informações pessoais.', 1, 'Criminosos criam perfis falsos para ganhar confiança e manipular vítimas.'),
+(7, 'Usar a mesma senha em vários sites é uma prática segura porque facilita lembrar as senhas.', 0, 'Se um site for invadido, todas as contas com a mesma senha podem ser comprometidas.'),
+(8, 'Atualizar aplicativos e sistemas operacionais ajuda a corrigir falhas de segurança.', 1, 'Atualizações frequentemente corrigem vulnerabilidades exploradas por hackers.'),
+(9, 'Golpes de falso suporte técnico acontecem quando criminosos fingem ser técnicos de empresas para pedir acesso ao computador.', 1, 'Nesse golpe, o criminoso tenta convencer a vítima a instalar softwares ou revelar informações.'),
+(10, 'Redes Wi-Fi públicas são sempre seguras para acessar aplicativos bancários.', 0, 'Em redes públicas, criminosos podem interceptar dados se a conexão não for segura.'),
+(11, 'Golpistas podem clonar contas de WhatsApp usando códigos de verificação enviados para o celular da vítima.', 1, 'Se a vítima informar o código, o criminoso pode assumir a conta.'),
+(12, 'Um e-mail com muitos erros de ortografia e links estranhos pode indicar tentativa de golpe.', 1, 'Mensagens fraudulentas frequentemente apresentam erros e links suspeitos.'),
+(13, 'Sites de compras com preços extremamente baixos sempre indicam promoções legítimas.', 0, 'Preços muito abaixo do mercado podem indicar lojas falsas ou golpes.'),
+(14, 'Engenharia social é uma técnica usada por criminosos para manipular pessoas e obter informações confidenciais.', 1, 'Nesse tipo de ataque o criminoso explora emoções e confiança da vítima.'),
+(15, 'Antivírus e softwares de segurança ajudam a reduzir o risco de infecção por malware.', 1, 'Eles detectam e bloqueiam programas maliciosos.'),
+(16, 'Se um amigo pedir dinheiro por mensagem, não é necessário confirmar porque a conta sempre pertence à pessoa.', 0, 'Golpistas podem invadir contas ou cloná-las para pedir dinheiro.'),
+(17, 'Links enviados por desconhecidos em redes sociais podem direcionar para sites maliciosos.', 1, 'Esses sites podem roubar dados ou instalar vírus.'),
+(18, 'Um certificado digital HTTPS impede completamente qualquer tipo de fraude online.', 0, 'Mesmo com HTTPS, o site pode ser fraudulento se estiver imitando outro.'),
+(19, 'Golpes de investimento prometendo lucros garantidos e muito rápidos são frequentemente usados por criminosos.', 1, 'Promessas de ganhos altos e rápidos são um sinal clássico de fraude.'),
+(20, 'Verificar a fonte de uma informação antes de compartilhá-la ajuda a evitar a disseminação de golpes digitais.', 1, 'Checar a veracidade da informação reduz a propagação de fraudes.');
+
+-- --------------------------------------------------------
+
+--
 -- Estrutura para view `estatisticas_usuario`
 --
 DROP TABLE IF EXISTS `estatisticas_usuario`;
@@ -435,10 +527,23 @@ ALTER TABLE `categorias`
   ADD PRIMARY KEY (`id_categoria`);
 
 --
+-- Índices de tabela `cenarios_golpe`
+--
+ALTER TABLE `cenarios_golpe`
+  ADD PRIMARY KEY (`id_cenario`);
+
+--
 -- Índices de tabela `conquistas`
 --
 ALTER TABLE `conquistas`
   ADD PRIMARY KEY (`id_conquista`);
+
+--
+-- Índices de tabela `erros_cenario`
+--
+ALTER TABLE `erros_cenario`
+  ADD PRIMARY KEY (`id_erro`),
+  ADD KEY `idx_cenario` (`id_cenario`);
 
 --
 -- Índices de tabela `fases`
@@ -514,6 +619,12 @@ ALTER TABLE `usuario_conquistas`
   ADD KEY `id_conquista` (`id_conquista`);
 
 --
+-- Índices de tabela `verdadeiro_falso`
+--
+ALTER TABLE `verdadeiro_falso`
+  ADD PRIMARY KEY (`id_pergunta`);
+
+--
 -- AUTO_INCREMENT para tabelas despejadas
 --
 
@@ -530,10 +641,22 @@ ALTER TABLE `categorias`
   MODIFY `id_categoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de tabela `cenarios_golpe`
+--
+ALTER TABLE `cenarios_golpe`
+  MODIFY `id_cenario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT de tabela `conquistas`
 --
 ALTER TABLE `conquistas`
   MODIFY `id_conquista` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de tabela `erros_cenario`
+--
+ALTER TABLE `erros_cenario`
+  MODIFY `id_erro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `fases`
@@ -594,6 +717,12 @@ ALTER TABLE `usuarios`
 --
 ALTER TABLE `usuario_conquistas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de tabela `verdadeiro_falso`
+--
+ALTER TABLE `verdadeiro_falso`
+  MODIFY `id_pergunta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Restrições para tabelas despejadas
