@@ -8,21 +8,20 @@ if(!isset($_SESSION['cenario'])){
 
 $cenario_id=$_SESSION['cenario'];
 
-/* CORREÇÃO AQUI */
 $sql="SELECT * FROM cenarios_golpe WHERE id_cenario=$cenario_id";
 $res=$conn->query($sql);
 $cenario=$res->fetch_assoc();
 
 if(!$cenario){
     echo "<body style='font-family:Arial;background:#0f172a;color:white;text-align:center;margin-top:150px'>";
-    echo "<h1>Parabéns! Você concluiu o jogo.</h1>";
+    echo "<h1>🎉 Parabéns! Você concluiu o jogo.</h1>";
+    echo "<br>";
     echo "<a href='index.php'><button>Voltar ao Menu</button></a>";
     echo "</body>";
     session_destroy();
     exit();
 }
 
-/* CORREÇÃO AQUI */
 $sql2="SELECT * FROM erros_cenario WHERE id_cenario=$cenario_id";
 $erros=$conn->query($sql2);
 
@@ -44,7 +43,7 @@ if(isset($_POST['x'])){
 
         $dist=sqrt(pow($x-$erro['pos_x'],2)+pow($y-$erro['pos_y'],2));
 
-        if($dist<$erro['raio']){
+        if($dist < $erro['raio']){
             $resposta="✔ Você encontrou o golpe!";
             $explicacao=$erro['explicacao'];
             $acertou=true;
@@ -67,28 +66,59 @@ if(isset($_POST['proximo'])){
 
 <html>
 <head>
+
 <meta charset="UTF-8">
 <title>Identificador de Golpes</title>
 
 <style>
+
 body{
-    font-family:Arial;
-    background:#0f172a;
-    color:white;
-    text-align:center;
+font-family:Arial;
+background:#0f172a;
+color:white;
+text-align:center;
+padding:20px;
 }
 
-img{
-    max-width:900px;
-    border:3px solid white;
-    cursor:pointer;
+/* container da imagem */
+.container{
+max-width:900px;
+margin:auto;
 }
 
+/* imagem */
+.container img{
+width:100%;
+max-height:80vh;
+object-fit:contain;
+cursor:pointer;
+}
+
+/* textos */
+h2{
+margin-bottom:10px;
+}
+
+p{
+font-size:18px;
+}
+
+/* botão */
 button{
-    padding:12px;
-    margin-top:20px;
-    border-radius:8px;
+padding:12px 20px;
+margin-top:20px;
+border-radius:8px;
+border:none;
+cursor:pointer;
+font-size:16px;
+background:#2563eb;
+color:white;
 }
+
+button:hover{
+background:#1d4ed8;
+}
+
 </style>
 
 </head>
@@ -96,16 +126,26 @@ button{
 <body>
 
 <h2><?php echo $cenario['titulo']; ?></h2>
-<p>Clique na parte da imagem que você acredita ser um sinal de golpe.</p>
+
+<p>
+Clique na parte da imagem que você acredita ser um sinal de golpe.
+</p>
+
+<div class="container">
 
 <form method="POST" id="form">
+
 <input type="hidden" name="x" id="x">
 <input type="hidden" name="y" id="y">
 
 <img src="imagens/<?php echo $cenario['imagem']; ?>" onclick="clicar(event)">
+
 </form>
 
+</div>
+
 <h3><?php echo $resposta; ?></h3>
+
 <p><?php echo $explicacao; ?></p>
 
 <?php if($acertou){ ?>
@@ -120,15 +160,16 @@ button{
 
 function clicar(e){
 
-    var rect=e.target.getBoundingClientRect();
+var rect = e.target.getBoundingClientRect();
 
-    var x=e.clientX-rect.left;
-    var y=e.clientY-rect.top;
+var x = e.clientX - rect.left;
+var y = e.clientY - rect.top;
 
-    document.getElementById("x").value=x;
-    document.getElementById("y").value=y;
+document.getElementById("x").value = x;
+document.getElementById("y").value = y;
 
-    document.getElementById("form").submit();
+document.getElementById("form").submit();
+
 }
 
 </script>

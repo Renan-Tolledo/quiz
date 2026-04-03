@@ -1,6 +1,8 @@
 <?php
 session_start();
+$_SESSION['id_usuario'] = 1;
 include("testeconexao.php");
+include("xp.php");
 
 // iniciar pergunta
 if (!isset($_SESSION['pergunta_atual'])) {
@@ -16,11 +18,18 @@ if (isset($_POST['resposta'])) {
     $res_check = $conn->query($sql_check);
     $dados = $res_check->fetch_assoc();
 
-    if ($dados && $dados['correta'] == 1) {
-        $_SESSION['mensagem'] = "✅ Acertou!";
-    } else {
-        $_SESSION['mensagem'] = "❌ Errou!";
-    }
+   if ($dados && $dados['correta'] == 1) {
+
+    $_SESSION['mensagem'] = "✅ Acertou! +10 XP";
+
+    // adiciona XP ao jogador
+    adicionarXP($conn, $_SESSION['id_usuario'], 10);
+
+} else {
+
+    $_SESSION['mensagem'] = "❌ Errou!";
+
+}
 
     $_SESSION['pergunta_atual']++;
 
