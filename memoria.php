@@ -1,3 +1,7 @@
+
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -41,31 +45,25 @@ body {
 <body>
 
 <h1>🧠 Jogo da Memória</h1>
+<p id="tentativas">Tentativas: 0</p>
 
 <div class="grid" id="game"></div>
 
 <script>
 
-// pares (IMPORTANTE: repetidos)
 const cards = [
-    "A","A",
-    "B","B",
-    "C","C",
-    "D","D",
-    "E","E",
-    "F","F",
-    "G","G",
-    "H","H"
+"A","A","B","B","C","C","D","D",
+"E","E","F","F","G","G","H","H"
 ];
 
-// embaralhar
 let shuffled = cards.sort(() => 0.5 - Math.random());
 
 let game = document.getElementById("game");
 
 let first = null;
+let matches = 0;
+let attempts = 0;
 
-// criar cartas
 shuffled.forEach(text => {
 
     let div = document.createElement("div");
@@ -80,14 +78,38 @@ shuffled.forEach(text => {
         div.classList.add("revealed");
 
         if (!first) {
+
             first = div;
+
         } else {
 
+            attempts++;
+            document.getElementById("tentativas").innerText = "Tentativas: " + attempts;
+
             if (first.innerText === div.innerText) {
-                // acertou
+
+                matches++;
+
+                if(matches === 8){
+
+                    let xp = 15;
+
+                    if(attempts <= 12){
+                        xp = 50;
+                    } else if(attempts <= 20){
+                        xp = 30;
+                    }
+
+                    alert("🎉 Você completou o jogo em " + attempts + " tentativas! +" + xp + " XP");
+
+                    fetch("memoria_xp.php?xp=" + xp);
+
+                }
+
                 first = null;
+
             } else {
-                // errou
+
                 setTimeout(() => {
                     div.innerText = "?";
                     first.innerText = "?";
@@ -95,8 +117,10 @@ shuffled.forEach(text => {
                     first.classList.remove("revealed");
                     first = null;
                 }, 800);
+
             }
         }
+
     });
 
     game.appendChild(div);
@@ -106,7 +130,7 @@ shuffled.forEach(text => {
 
 <br><br>
 <a href="index.php">
-    <button>⬅ Voltar</button>
+<button>⬅ Voltar</button>
 </a>
 
 </body>

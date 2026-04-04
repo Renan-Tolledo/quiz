@@ -1,6 +1,18 @@
 <?php
 session_start();
+if(!isset($_SESSION['combo'])){
+    $_SESSION['combo'] = 0;
+}
+if(!isset($_SESSION['bonus3'])){
+    $_SESSION['bonus3'] = false;
+}
+
+if(!isset($_SESSION['bonus5'])){
+    $_SESSION['bonus5'] = false;
+}
+$_SESSION['id_usuario'] = 1;
 include("testeconexao.php");
+include("xp.php");
 
 if (!isset($_SESSION['vf_pergunta'])) {
     $_SESSION['vf_pergunta'] = 1;
@@ -29,11 +41,40 @@ if (isset($_POST['resposta'])) {
     $resposta_usuario = $_POST['resposta'];
     $resposta_dada = true;
 
-    if ($resposta_usuario == $pergunta['resposta_correta']) {
-        $mensagem = "✅ Resposta correta!";
-    } else {
-        $mensagem = "❌ Resposta incorreta!";
+if ($resposta_usuario == $pergunta['resposta_correta']) {
+
+    $_SESSION['combo']++;
+
+    $xp = 5;
+    $bonus = 0;
+
+    if($_SESSION['combo'] == 3 && !$_SESSION['bonus3']){
+        $bonus = 10;
+        $_SESSION['bonus3'] = true;
     }
+
+    if($_SESSION['combo'] == 5 && !$_SESSION['bonus5']){
+        $bonus = 20;
+        $_SESSION['bonus5'] = true;
+    }
+
+    $xp_total = $xp + $bonus;
+
+    adicionarXP($conn, $_SESSION['id_usuario'], $xp_total);
+
+    $mensagem = "✅ Resposta correta! +$xp XP";
+
+    if($bonus > 0){
+        $mensagem .= "<br>🔥 Bônus de sequência +$bonus XP";
+    }
+
+} else {
+
+    $_SESSION['combo'] = 0;
+
+    $mensagem = "❌ Resposta incorreta! Sequência reiniciada.";
+
+}
 
     $explicacao = $pergunta['explicacao'];
 }
@@ -80,6 +121,7 @@ margin-right:auto;
 <body>
 
 <h2><?php echo $pergunta['pergunta']; ?></h2>
+<p>🔥 Sequência atual: <?php echo $_SESSION['combo']; ?></p>
 
 <?php if(!$resposta_dada){ ?>
 

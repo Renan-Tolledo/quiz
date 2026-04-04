@@ -1,6 +1,8 @@
 <?php
 session_start();
+$_SESSION['id_usuario'] = 1;
 include("testeconexao.php");
+include("xp.php");
 
 if(!isset($_SESSION['cenario'])){
     $_SESSION['cenario']=1;
@@ -44,11 +46,16 @@ if(isset($_POST['x'])){
         $dist=sqrt(pow($x-$erro['pos_x'],2)+pow($y-$erro['pos_y'],2));
 
         if($dist < $erro['raio']){
-            $resposta="✔ Você encontrou o golpe!";
-            $explicacao=$erro['explicacao'];
-            $acertou=true;
-            break;
-        }
+
+    $resposta="✔ Você encontrou o golpe! +20 XP";
+    $explicacao=$erro['explicacao'];
+
+    // adiciona XP ao ranking
+    adicionarXP($conn, $_SESSION['id_usuario'], 20);
+
+    $acertou=true;
+    break;
+}
     }
 
     if(!$acertou){
