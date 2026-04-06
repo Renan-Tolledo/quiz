@@ -1,6 +1,5 @@
 <?php
 session_start();
-$_SESSION['id_usuario'] = 1;
 include("testeconexao.php");
 include("xp.php");
 
